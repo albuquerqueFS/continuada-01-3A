@@ -9,11 +9,11 @@ import java.util.Date;
 @RequestMapping("/autenticacao")
 public class Autenticacao implements Autenticar {
 
-    // Suposta conta de admin
+    // Conta de admin
     String adminUsuario = "admin";
     String adminSenha = "admin";
 
-    // Suposta conta de cliente
+    // Conta de cliente
     String clientUsuario = "fulano";
     String clientSenha = "123loko";
 
@@ -25,22 +25,13 @@ public class Autenticacao implements Autenticar {
     public String logar(@RequestParam(value = "usuario") String usuario, @RequestParam(value = "senha") String senha) {
 
         if (usuario.equals(this.adminUsuario)) {
-            if (senha.equals(this.adminSenha)) {
-                this.auth = true;
-                this.admin = true;
-                dataLogin = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-                return "Autenticado com sucesso!";
-            }
+            return loginAdmin(usuario, senha);
         }
 
         if (usuario.equals(this.clientUsuario)) {
-            if (senha.equals(this.clientSenha)) {
-                this.auth = true;
-                this.admin = false;
-                dataLogin = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-                return "Autenticado com sucesso!";
-            }
+            return loginClient(usuario, senha);
         }
+
         return "Login ou senha incorretos";
     }
 
@@ -54,9 +45,9 @@ public class Autenticacao implements Autenticar {
     public String pegarUsuarioAutenticado() {
         if (isAuth()) {
             if (isAdmin()) {
-                return "{ \"usuario\": \"" + this.adminUsuario + "\", \"entrada\": \"" + this.dataLogin + "\"}";
+                return "{ \"usuario\": \"" + this.adminUsuario + "\", \"tipo:\" \"administrador\", \"entrada\": \"" + this.dataLogin + "\"}";
             }
-            return "{ \"usuario\": \"" + this.clientUsuario + "\", \"entrada\": \"" + this.dataLogin + "\"}";
+            return "{ \"usuario\": \"" + this.clientUsuario + "\", \"tipo:\" \"assistente\", \"entrada\": \"" + this.dataLogin + "\"}";
         } else {
             return "Usuário não autenticado";
         }
@@ -68,7 +59,29 @@ public class Autenticacao implements Autenticar {
     }
 
     @Override
-    public boolean isAdmin() {
-        return this.admin;
+    public boolean isAdmin() { return this.admin; }
+
+    @Override
+    @ResponseBody
+    public String loginAdmin(String login, String senha) {
+        if (senha.equals(this.adminSenha)) {
+            this.admin = true;
+            this.auth = true;
+            dataLogin = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+            return "Autenticado com sucesso";
+        }
+        return "Senha incorreta";
+    }
+
+    @Override
+    @ResponseBody
+    public String loginClient(String login, String senha) {
+        if (senha.equals(this.clientSenha)) {
+            this.admin = false;
+            this.auth = true;
+            dataLogin = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+            return "Autenticado com sucesso";
+        }
+        return "Senha incorreta";
     }
 }
