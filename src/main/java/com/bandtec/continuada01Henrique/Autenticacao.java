@@ -39,4 +39,12 @@ public class Autenticacao {
         this.auth = false;
     }
 
+    @GetMapping("")
+    public String pegarUsuarioAutenticado() {
+        if (this.auth == true) {
+            return "{ \"usuario\": \"" + this.usuario + "\", \"entrada\": \"" + this.dataLogin + "\"}";
+        } else {
+            return "Usuário não autenticado";
+        }
+    }
 }
