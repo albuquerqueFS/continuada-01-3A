@@ -1,17 +1,13 @@
 package com.bandtec.continuada01Henrique;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/autenticacao")
 public class Autenticacao {
-    String pattern = "dd-MM-yyyy hh-mm-ss";
     String usuario = "fulano";
     String senha = "123loko";
     String dataLogin = "";
