@@ -7,7 +7,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/autenticacao")
-public class Autenticacao implements Autenticar {
+public class AutenticacaoController implements Autenticar {
 
     // Conta de admin
     String adminUsuario = "admin";
